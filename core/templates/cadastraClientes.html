@@ -1,0 +1,26 @@
+{% load bootstrap5%}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastra Clientes</title>
+    {% bootstrap_css%}
+</head>
+<body>
+    <div class="container">
+        <h1>Formulário de Cadastro de Cliente</h1>
+
+        <form action="{% url 'urlsalvarClientes' %}" method="post" class="form">
+            {% csrf_token %}
+            <p><input type="text" name="nome" id="nome" placeholder="Insira seu nome.."></p>
+            <p><input type="text" name="sobrenome" id="sobrenome" placeholder="Insira seu sobrenome.."></p>
+            <p><input type="tel" name="telefone" id="telefone" placeholder="Insira seu número.."></p>
+            <p><input type="email" name="email" id="email" placeholder="Insira seu email.."></p>
+            <p><input type="number" name="cpf" id="cpf" placeholder="Insira seu CPF.."></p>
+            <p><input type="submit" value="Cadastrar" class="btn btn-submit btn-primary btn-outline-info"></p>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Produto, Cliente
+from django.http import HttpResponse
 
 def index(request):
     context = {'curso': 'Desenvolvimento de Sistemas'}
@@ -22,3 +23,23 @@ def clientes(request):
     clientes = Cliente.objects.all()
     context = {'cli': clientes}
     return render (request, 'clientes.html', context)
+
+def cadastraClientes(request):
+    return render (request, 'cadastraClientes.html')
+
+def salvarClientes(request):
+    thisNome = request.POST.get('nome')
+    thisSobrenome = request.POST.get('sobrenome')
+    thisEmail = request.POST.get('email')
+    thisTelefone = request.POST.get('telefone')
+    thisCPF = request.POST.get('cpf')
+    cliente = Cliente(
+        nome = thisNome,
+        sobrenome = thisSobrenome,
+        email = thisEmail,
+        telefone = thisTelefone,
+        cpf = thisCPF
+    )
+    cliente.save()
+
+    return redirect('urlclientes')
