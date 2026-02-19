@@ -9,3 +9,12 @@ class Produto(models.Model):
     def __str__(self):
         return self.nome
 
+class Cliente(models.Model):
+    nome = models.CharField(max_length=200)
+    sobrenome = models.CharField(max_length=200, null=True,blank=True)
+    data_nascimento = models.DateField(auto_now_add=True, null=True,blank=True)
+    cpf = models.PositiveIntegerField(max_length=30, null=True,blank=True)
+    telefone = models.PositiveIntegerField(max_length=30, null=True,blank=True)
+    email = models.EmailField(max_length=200, null=True, blank=True)
+    def __str__(self):
+        return self.nome
