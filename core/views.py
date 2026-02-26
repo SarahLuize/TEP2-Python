@@ -28,18 +28,35 @@ def cadastraClientes(request):
     return render (request, 'cadastraClientes.html')
 
 def salvarClientes(request):
-    thisNome = request.POST.get('nome')
-    thisSobrenome = request.POST.get('sobrenome')
-    thisEmail = request.POST.get('email')
-    thisTelefone = request.POST.get('telefone')
-    thisCPF = request.POST.get('cpf')
-    cliente = Cliente(
-        nome = thisNome,
-        sobrenome = thisSobrenome,
-        email = thisEmail,
-        telefone = thisTelefone,
-        cpf = thisCPF
-    )
-    cliente.save()
+    if request.method == 'POST':
+        thisNome = request.POST.get('nome')
+        thisSobrenome = request.POST.get('sobrenome')
+        thisEmail = request.POST.get('email')
+        thisTelefone = request.POST.get('telefone')
+        thisCPF = request.POST.get('cpf')
+        cliente = Cliente(
+            nome = thisNome,
+            sobrenome = thisSobrenome,
+            email = thisEmail,
+            telefone = thisTelefone,
+            cpf = thisCPF
+        )
+        cliente.save()
 
+    return redirect("urlclientes")
+    return redirect ("urlcadastraClientes")
+
+def editaCliente(request, id):
+    cliente = Cliente.objects.get(id=id)
+
+    if request.method == "GET":
+        context = {'cliente': cliente}
+        return render(request, 'editaCliente.html', context)
+  
+    cliente.nome = request.POST.get('nome')
+    cliente.sobrenome = request.POST.get('sobrenome')
+    cliente.telefone = request.POST.get('telefone')
+    cliente.email = request.POST.get('email')
+    cliente.cpf = request.POST.get('cpf')
+    cliente.save()
     return redirect('urlclientes')

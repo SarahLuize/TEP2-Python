@@ -21,6 +21,8 @@
                 <th>CPF</th>
                 <th>Telefone</th>
                 <th>Email</th>
+                <th>Editar</th>
+                <th>Excluir</th>
             </tr>
         </thead>
         <tbody>
@@ -32,11 +34,23 @@
                 <td>{{ c.cpf }}</td>
                 <td>{{ c.telefone }}</td>
                 <td>{{ c.email }}</td>
+                <td>
+                    <form action="{% url 'urleditaCliente' c.id %}">
+                        <input type="submit" value="Editar" class="btn btn-warning">
+                    </form>
+                </td>
+                <td>
+                    <form action="">
+                        <input type="submit" value="Excluir" class="btn btn-danger">
+                    </form>
+                </td>
             {% endfor %}
             </tr>
         </tbody>
     </table>
 
-        <a href="cadastraClientes.html" class="btn btn-primary">Novo cliente</a>
+        <form action="{% url 'urlsalvarClientes' %}" method="get">
+            <input type="submit" value="Novo cliente" class="btn btn-primary">
+        </form>
 </body>
 </html>

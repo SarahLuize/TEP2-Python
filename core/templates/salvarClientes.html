@@ -12,7 +12,7 @@
     <div class="container">
         <h1>Formulário de Cadastro de Cliente</h1>
 
-        <form action="{% url 'urlsalvarClientes' %}" method="post" class="form">
+        <form action="{% url 'urlsalvarClientes' %}" method="POST" class="form">
             {% csrf_token %}
             <p><input type="text" name="nome" id="nome" placeholder="Insira seu nome.."></p>
             <p><input type="text" name="sobrenome" id="sobrenome" placeholder="Insira seu sobrenome.."></p>

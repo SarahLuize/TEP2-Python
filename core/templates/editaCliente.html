@@ -1,0 +1,26 @@
+{% load bootstrap5%}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edita Cliente</title>
+    {% bootstrap_css%}
+</head>
+<body>
+    <div class="container">
+        <h1>Formulário de Edição do Cliente</h1>
+
+        <form action="{% url 'urleditaCliente' cliente.id %}" method="POST" class="form">
+            {% csrf_token %}
+            <p><input type="text" name="nome" id="nome" value="{{cliente.nome}}"></p>
+            <p><input type="text" name="sobrenome" id="sobrenome" value="{{cliente.sobrenome}}"></p>
+            <p><input type="tel" name="telefone" id="telefone" value="{{cliente.telefone}}"></p>
+            <p><input type="email" name="email" id="email" value="{{cliente.email}}"></p>
+            <p><input type="number" name="cpf" id="cpf" value="{{cliente.cpf}}"></p>
+            <p><input type="submit" value="Salvar" class="btn btn-submit btn-primary btn-outline-info"></p>
+        </form>
+    </div>
+</body>
+</html>
