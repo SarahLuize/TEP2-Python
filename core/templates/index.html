@@ -8,5 +8,14 @@
 <body>
     <h1>Página inicial</h1>
     <h2>{{ curso }}</h2>
+
+    <h2>Páginas</h2>
+    <ul>
+        <li><a href="{% url 'urlentrar' %}">Login</a></li>
+        <li><a href="{% url 'urlprodutos' %}">Produtos</a></li>
+        <li><a href="{% url 'urlclientes' %}">Clientes</a></li>
+        <li><a href="{% url 'urlsalvarClientes' %}">Salvar clientes</a></li>
+        <li><a href="{% url 'urlcontato' %}">Contato</a></li>
+    </ul>
 </body>
 </html>
