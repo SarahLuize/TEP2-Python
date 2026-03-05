@@ -8,6 +8,8 @@ from .forms import ProdutoForm
 
 def index(request):
     context = {'curso': 'Desenvolvimento de Sistemas'}
+    prod = Produto.objects.all()
+    context = {'prod': prod}
     return render(request, 'index.html', context)
 
 def contato(request):
@@ -52,7 +54,6 @@ def salvarClientes(request):
         cliente.save()
 
     return redirect("urlclientes")
-    return redirect ("urlcadastraClientes")
 
 @login_required(login_url='urlentrar')
 def editaCliente(request, id):
@@ -96,6 +97,17 @@ def salvarProdutos(request):
         return render(request, 'salvarProdutos.html', {'form': form})
     else:
         form = ProdutoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('urlprodutos')
+        
+def editarProdutos(request, id):
+    produto = Produto.objects.get(id=id)
+    if request.method == 'GET':
+        form = ProdutoForm(instance=produto)
+        return render(request, 'editarProdutos.html', {'form': form})
+    else:
+        form = ProdutoForm(request.POST, request.FILES, instance=produto)
         if form.is_valid():
             form.save()
             return redirect('urlprodutos')
