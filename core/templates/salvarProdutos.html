@@ -1,13 +1,9 @@
-{% load bootstrap5 %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salvar produtos</title>
-    {% bootstrap_css %}
-</head>
-<body>
+{% extends 'global/base.html' %}
+{% block title %}
+  Salvar Produtos
+{% endblock %}
+
+{% block content %}
     <div class="container">
         <h1>Cadastro de produtos</h1>
         <form action="{% url 'urlsalvarProdutos' %}" method="POST">
@@ -19,5 +15,4 @@
             <input type="submit" value="Salvar" class="btn btn-success">
         </form>
     </div>
-</body>
-</html>
+{% endblock %}

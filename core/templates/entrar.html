@@ -1,13 +1,9 @@
-{% load bootstrap5 %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrar no site</title>
-    {% bootstrap_css%}
-</head>
-<body>
+{% extends 'global/base.html' %}
+{% block title %}
+  Entrar no Site
+{% endblock %}
+
+{% block content %}
     <h2 style="text-align: center;">──────────────────── ⋆⋅☆⋅⋆ ────────────────────</h2>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -56,5 +52,4 @@
             {% endfor %}
         {% endif %}
     </div>
-</body>
-</html>
+{% endblock %}

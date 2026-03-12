@@ -1,14 +1,9 @@
-{% load bootstrap5%}
+{% extends 'global/base.html' %}
+{% block title %}
+  Editar Cliente
+{% endblock %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edita Cliente</title>
-    {% bootstrap_css%}
-</head>
-<body>
+{% block content %}
     <div class="container">
         <h1>Formulário de Edição do Cliente</h1>
 
@@ -22,5 +17,4 @@
             <p><input type="submit" value="Salvar" class="btn btn-submit btn-primary btn-outline-info"></p>
         </form>
     </div>
-</body>
-</html>
+{% endblock %}
