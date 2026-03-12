@@ -28,4 +28,7 @@ Tópicos Especiais em Programação II
     python -m pip install tzdata
 
     ⚡ Instalar Bootstrap5
-    pip install django-bootstrap-v5
+    -m pip install django-bootstrap-v5
+
+    ⚡ Instalar Pillow
+    -m pip install pillow
