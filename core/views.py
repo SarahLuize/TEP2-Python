@@ -12,6 +12,7 @@ def index(request):
     context = {'prod': prod}
     return render(request, 'index.html', context)
 
+@login_required(login_url='urlentrar')
 def contato(request):
     context = { 
         'nome': 'Sarah',
