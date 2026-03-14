@@ -40,21 +40,22 @@ def cadastraClientes(request):
 @login_required(login_url='urlentrar')
 def salvarClientes(request):
     if request.method == 'POST':
-        thisNome = request.POST.get('nome')
-        thisSobrenome = request.POST.get('sobrenome')
-        thisEmail = request.POST.get('email')
-        thisTelefone = request.POST.get('telefone')
-        thisCPF = request.POST.get('cpf')
+        thisnome = request.POST.get('nome')
+        thissobrenome = request.POST.get('sobrenome')
+        thisemail = request.POST.get('email')
+        thistelefone = request.POST.get('telefone')
+        thiscpf = request.POST.get('cpf')
         cliente = Cliente(
-            nome = thisNome,
-            sobrenome = thisSobrenome,
-            email = thisEmail,
-            telefone = thisTelefone,
-            cpf = thisCPF
+            nome = thisnome,
+            sobrenome = thissobrenome,
+            email = thisemail,
+            telefone = thistelefone,
+            cpf = thiscpf
         )
         cliente.save()
-
-    return redirect("urlclientes")
+        return redirect("urlclientes")
+    
+    return render(request, "salvarClientes.html")
 
 @login_required(login_url='urlentrar')
 def editaCliente(request, id):
@@ -70,6 +71,12 @@ def editaCliente(request, id):
     cliente.email = request.POST.get('email')
     cliente.cpf = request.POST.get('cpf')
     cliente.save()
+    return redirect('urlclientes')
+
+@login_required(login_url='urlentrar')
+def apagaCliente(request, id):
+    cliente = Cliente.objects.get(id=id)
+    cliente.delete()
     return redirect('urlclientes')
 
 def entrar(request):

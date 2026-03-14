@@ -76,7 +76,7 @@ a {
 }
 
 .button-show-menu-visible {
-    visibility: visible;
+    visibility: visible; 
     opacity: 1;
     left: 5px;
 }

@@ -19,16 +19,13 @@ Tópicos Especiais em Programação II
 📦 Dependências do Projeto
 
     ⚡ Instalar django-localflavor
-        pip install django-localflavor
-
-        💻 Uso no código:
-        from localflavor.br.models import BRCPFField
+        python -m pip install django-localflavor
 
     ⚡ Instalar tzdata
-    python -m pip install tzdata
+        python -m pip install tzdata
 
     ⚡ Instalar Bootstrap5
-    -m pip install django-bootstrap-v5
+        python -m pip install django-bootstrap-v5
 
     ⚡ Instalar Pillow
-    -m pip install pillow
+        python -m pip install pillow
