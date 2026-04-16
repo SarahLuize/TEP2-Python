@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
-from .models import Produto, Cliente
+from .models import Produto, Cliente, Avaliacao
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import ProdutoForm
+import io
+import urllib, base64
 
 def index(request):
     context = {'curso': 'Desenvolvimento de Sistemas'}
@@ -119,3 +121,54 @@ def editarProdutos(request, id):
         if form.is_valid():
             form.save()
             return redirect('urlprodutos')
+        
+def get_dataframe():
+    # Busca todos os dados do banco e retorna um DataFrame do Pandas
+    avaliacoes = Avaliacao.objects.all().values()
+    df = pd.DataFrame(list(avaliacoes))
+    return df
+
+def plot_to_base64(fig):
+    # Converte uma figura Matplotlib para uma string base64 para ser usada no HTML
+    buf = io.BytesIO()
+    fig.savefig(buf, format='png')
+    buf.seek(0)
+    string = base64.b64encode(buf.read())
+    return urllib.parse.quote(string)
+
+def distribuicao_das_notas_view(request):
+    df = get_dataframe()
+    plt.figure(figsize=(10, 6))
+    df['review_score'].value_counts().sort_index().plot(kind='bar', color='skyblue')
+    plt.title('Distribuição das Notas das Avaliações')
+    plt.xlabel('Nota (Score)')
+    plt.ylabel('Quantidade de Avaliações')
+    plt.grid(axis='y', linestyle='--')
+    plt.tight_layout()
+    grafico_distribuicao_notas = plot_to_base64(plt.gcf())
+    plt.close()
+    context = {'grafico_distribuicao_notas': grafico_distribuicao_notas,}
+    return render(request, 'core/dashboard.html', context)
+
+def livros_mais_avaliados_view(request):
+    top_10_livros = df['title'].value_counts().nlargest(10)
+    plt.figure(figsize=(12, 8))
+    top_10_livros.sort_values().plot(kind='barh', color='coral')
+    plt.title('Top 10 Livros com Mais Avaliações')
+    plt.xlabel('Número de Avaliações')
+    plt.ylabel('Título do Livro')
+    plt.tight_layout()
+    grafico_top_livros = plot_to_base64(plt.gcf())
+    plt.close()
+    
+    context = {
+        'grafico_top_livros': grafico_top_livros,
+        'total_avaliacoes': len(df)
+    }
+    
+    return render(request, 'core/dashboard.html', context)
+
+def usuarios_mais_ativos_view(request):
+    usuarios_mais_ativos = df['profile_name'].value_counts()
+    
+    return render(request, 'core/grafico_usuarios_ativos', context)

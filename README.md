@@ -29,3 +29,6 @@ Tópicos Especiais em Programação II
 
     ⚡ Instalar Pillow
         python -m pip install pillow
+
+    ⚡ Instalar Pandas, Numpy e Matplotlib
+        python -m pip install pandas, numpy, matplotlib
