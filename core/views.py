@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from .forms import ProdutoForm
 import io
 import urllib, base64
+import pandas as pd
+import matplotlib.pyplot as plt
 
 def index(request):
     context = {'curso': 'Desenvolvimento de Sistemas'}
@@ -136,19 +138,19 @@ def plot_to_base64(fig):
     string = base64.b64encode(buf.read())
     return urllib.parse.quote(string)
 
-def distribuicao_das_notas_view(request):
-    df = get_dataframe()
+def distribuicao_das_notas_view(df):
     plt.figure(figsize=(10, 6))
     df['review_score'].value_counts().sort_index().plot(kind='bar', color='skyblue')
     plt.title('Distribuição das Notas das Avaliações')
-    plt.xlabel('Nota (Score)')
+    plt.xlabel('Nota Score')
     plt.ylabel('Quantidade de Avaliações')
     plt.grid(axis='y', linestyle='--')
     plt.tight_layout()
     grafico_distribuicao_notas = plot_to_base64(plt.gcf())
     plt.close()
-    context = {'grafico_distribuicao_notas': grafico_distribuicao_notas,}
-    return render(request, 'core/dashboard.html', context)
+    # context = {'grafico_distribuicao_notas': grafico_distribuicao_notas,}
+    # return render(request, 'core/distribuicao_das_notas_view', context)
+    return grafico_distribuicao_notas
 
 def livros_mais_avaliados_view(request):
     top_10_livros = df['title'].value_counts().nlargest(10)
@@ -166,9 +168,68 @@ def livros_mais_avaliados_view(request):
         'total_avaliacoes': len(df)
     }
     
-    return render(request, 'core/dashboard.html', context)
+    return render(request, 'core/livros_mais_avaliados_view', context)
 
 def usuarios_mais_ativos_view(request):
-    usuarios_mais_ativos = df['profile_name'].value_counts()
+    usuarios_mais_ativos = df['profile_name'].value_counts().dropna().nlargest(15)
+    plt.figure(figsize=(12, 6))
+    plt.barh()
+    plt.title('Top 15 Usuários Mais Ativos')
+    plt.xlabel('Número de Avaliações')
+    plt.ylabel('Usuário')
+    plt.tight_layout()
     
+    grafico_usuarios_ativos =  plot_to_base64(plt.gcf())
+    plt.close()
+    
+    context = {'grafico_usuarios_ativos': grafico_usuarios_ativos,}
     return render(request, 'core/grafico_usuarios_ativos', context)
+
+def evolucao_reviews_view(df): 
+    dados = pd.to_datetime(df['review_time'], unit='s')
+    df['ano'] = df['data_review'].dt.year # Arrumar
+    qtdeAvalpAno = df.groupby('ano').size()
+    
+    plt.plot(marker='o')
+    plt.figure(figsize=(12, 6))
+    plt.title('Evolução do Número de Avaliações por Ano')
+    plt.xlabel('Ano')
+    plt.ylabel('Quantidade de Avaliações')
+    
+    grafico_evolucao_reviews =  plot_to_base64(plt.gcf())
+    plt.close()
+    
+    context = {'grafico_evolucao_reviews': grafico_evolucao_reviews,}
+    return render(request, 'core/grafico_evolucao_reviews', context)
+
+def preco_vs_score_view(df):
+    dadosNotNull = df[df['price'] > 0]
+    filtrar = df.sample(n=300)
+    
+    plt.scatter(df['price'], df['review_score'], alpha=0.3)
+    plt.figure(figsize=(12,8))
+    plt.xlabel('Preço')
+    plt.ylabel('Avaliação - Pontuação')
+    plt.title('Correlação entre Preço e Nota da Avaliação')
+    
+    grafico_preco_score =  plot_to_base64(plt.gcf())
+    plt.close()
+    
+    return grafico_preco_score
+    
+def sentimento_reviews_view(request):   
+    avl = df['review_summary']
+    avlPos = [""]
+    avlNeg = [""]
+    
+def dashboard(request):
+    df = get_dataframe()
+    grafico_preco_score = preco_vs_score_view(df)
+    grafico_distribuicao_das_notas = distribuicao_das_notas_view(df)
+    # grafico_evolucao_reviews_view = evolucao_reviews_view(df) Arrumar
+    context = {
+        'grafico_preco_score': grafico_preco_score,
+        'grafico_distribuicao_das_notas': grafico_distribuicao_das_notas,
+        # 'grafico_evolucao_reviews_view': grafico_evolucao_reviews_view,
+    }
+    return render(request, 'dashboard.html', context)

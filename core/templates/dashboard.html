@@ -8,28 +8,6 @@
 
   <h1 style="text-align:center">Dashboard</h1>
 
-  {% comment %} <div class="container mt-4">
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
-      {% for p in prod %}
-        <div class="card-group">
-          <div class="card">
-            {% if p.imagem %}
-              <img src="{{ p.imagem.url }}" alt="{{ p.nome }}" />
-            {% else %}
-              <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
-                <span class="text-white">Sem imagem</span>
-              </div>
-            {% endif %}
-            <div class="card-body">
-              <h5 class="card-title">{{ p.nome }}</h5>
-              <p class="card-text">{{ p.descricao|truncatechars:100 }}</p>
-            </div>
-            <div class="card-footer">
-              <small class="text-body-secondary">{{ p.data_de_validade }}</small>
-            </div>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-  </div> {% endcomment %}
+  <img src="data:image/png;base64, {{grafico_preco_score}}" alt="titulo da imagem">
+  <img src="data:image/png;base64, {{grafico_distribuicao_das_notas}}" alt="titulo da imagem">
 {% endblock %}

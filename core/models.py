@@ -29,6 +29,7 @@ class Avaliacao(models.Model):
     review_helpfulness = models.CharField(max_length=20, null=True, blank=True)
     review_score = models.FloatField()
     review_time = models.IntegerField()
+    # ano = models.IntegerField()
     review_summary = models.CharField(max_length=255, null=True, blank=True)
     review_text = models.TextField(null=True, blank=True)
     
