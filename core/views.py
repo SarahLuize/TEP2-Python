@@ -173,8 +173,9 @@ def livros_mais_avaliados_view(request):
 
 def usuarios_mais_ativos_view(df):
     usuarios_mais_ativos = df['profile_name'].value_counts().dropna().nlargest(15)
+    avaliacoes = df['profile_name'].value_counts().dropna().nlargest(15)
     plt.figure(figsize=(12, 6))
-    plt.barh(usuarios_mais_ativos, width=usuarios_mais_ativos)
+    plt.barh(usuarios_mais_ativos, avaliacoes)
     plt.title('Top 15 Usuários Mais Ativos')
     plt.xlabel('Número de Avaliações')
     plt.ylabel('Usuário')
