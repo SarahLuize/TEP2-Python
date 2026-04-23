@@ -173,10 +173,8 @@ def livros_mais_avaliados_view(request):
 
 def usuarios_mais_ativos_view(df):
     usuarios_mais_ativos = df['profile_name'].value_counts().dropna().nlargest(15)
-    df['ano'] = pd.to_datetime(df['review_time'], unit='s').dt.year
-    ano = df['ano']
     plt.figure(figsize=(12, 6))
-    plt.barh(usuarios_mais_ativos, ano)
+    plt.barh(usuarios_mais_ativos, width=usuarios_mais_ativos)
     plt.title('Top 15 Usuários Mais Ativos')
     plt.xlabel('Número de Avaliações')
     plt.ylabel('Usuário')
