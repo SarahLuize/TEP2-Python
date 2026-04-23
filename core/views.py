@@ -8,6 +8,8 @@ from .forms import ProdutoForm
 import io
 import urllib, base64
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 def index(request):
@@ -148,8 +150,7 @@ def distribuicao_das_notas_view(df):
     plt.tight_layout()
     grafico_distribuicao_notas = plot_to_base64(plt.gcf())
     plt.close()
-    # context = {'grafico_distribuicao_notas': grafico_distribuicao_notas,}
-    # return render(request, 'core/distribuicao_das_notas_view', context)
+
     return grafico_distribuicao_notas
 
 def livros_mais_avaliados_view(request):
@@ -170,10 +171,12 @@ def livros_mais_avaliados_view(request):
     
     return render(request, 'core/livros_mais_avaliados_view', context)
 
-def usuarios_mais_ativos_view(request):
+def usuarios_mais_ativos_view(df):
     usuarios_mais_ativos = df['profile_name'].value_counts().dropna().nlargest(15)
+    df['ano'] = pd.to_datetime(df['review_time'], unit='s').dt.year
+    ano = df['ano']
     plt.figure(figsize=(12, 6))
-    plt.barh()
+    plt.barh(usuarios_mais_ativos, ano)
     plt.title('Top 15 Usuários Mais Ativos')
     plt.xlabel('Número de Avaliações')
     plt.ylabel('Usuário')
@@ -182,54 +185,81 @@ def usuarios_mais_ativos_view(request):
     grafico_usuarios_ativos =  plot_to_base64(plt.gcf())
     plt.close()
     
-    context = {'grafico_usuarios_ativos': grafico_usuarios_ativos,}
-    return render(request, 'core/grafico_usuarios_ativos', context)
+    return grafico_usuarios_ativos
 
 def evolucao_reviews_view(df): 
-    dados = pd.to_datetime(df['review_time'], unit='s')
-    df['ano'] = df['data_review'].dt.year # Arrumar
+    df['ano'] = pd.to_datetime(df['review_time'], unit='s').dt.year
     qtdeAvalpAno = df.groupby('ano').size()
-    
-    plt.plot(marker='o')
+
     plt.figure(figsize=(12, 6))
+    plt.plot(qtdeAvalpAno.index, qtdeAvalpAno.values, marker='o')
     plt.title('Evolução do Número de Avaliações por Ano')
     plt.xlabel('Ano')
     plt.ylabel('Quantidade de Avaliações')
     
     grafico_evolucao_reviews =  plot_to_base64(plt.gcf())
     plt.close()
-    
-    context = {'grafico_evolucao_reviews': grafico_evolucao_reviews,}
-    return render(request, 'core/grafico_evolucao_reviews', context)
+
+    return grafico_evolucao_reviews
 
 def preco_vs_score_view(df):
-    dadosNotNull = df[df['price'] > 0]
+    grafico_preco_score = df[df['price'] > 0]
     filtrar = df.sample(n=300)
-    
-    plt.scatter(df['price'], df['review_score'], alpha=0.3)
+
     plt.figure(figsize=(12,8))
+    plt.scatter(df['price'], df['review_score'], alpha=0.3)
     plt.xlabel('Preço')
     plt.ylabel('Avaliação - Pontuação')
     plt.title('Correlação entre Preço e Nota da Avaliação')
     
-    grafico_preco_score =  plot_to_base64(plt.gcf())
+    grafico_preco_score = plot_to_base64(plt.gcf())
     plt.close()
     
     return grafico_preco_score
-    
-def sentimento_reviews_view(request):   
-    avl = df['review_summary']
-    avlPos = [""]
-    avlNeg = [""]
-    
+
+def sentimento_reviews_view(df):   
+
+    def classificarSentimento(texto):
+        avlPos = ['good', 'great', 'excellent', 'I loved', 'I recommend', 'amazing', 'enchanted', 'fun', 'awesome', 'must-read', 'must read', 'fantastic', 'interesting', 'brilliant', 'greatest triology', 'greatest', 'the best', 'excelente', 'lovely book', 'best books ever', 'astonishing', 'great novel', 'fabulous']
+        avlNeg = ['bad','terrible', 'disappointing', 'disappointed', "I didn't like it", 'terrible', 'weakest', 'sin profundidad', 'awful', 'out ot date', 'useless']
+
+        texto = str(texto).lower()
+        if any(p in texto for p in avlPos): return 'Positivo'
+        if any(p in texto for p in avlNeg): return 'Negativo'   
+        return 'Neutro'
+
+    df['sentimento'] = df['review_summary'].fillna('').apply(classificarSentimento)
+    contagem = df['sentimento'].value_counts()
+        
+    plt.figure(figsize=(12,8))
+    plt.pie(contagem, autopct='%1.1f%%')
+    plt.title('Distribuição de Sentimentos nos Sumários das Avaliações')
+    plt.tight_layout()
+    grafico_sentimento_reviews = plot_to_base64(plt.gcf())
+    plt.close()
+
+    return grafico_sentimento_reviews
+
 def dashboard(request):
     df = get_dataframe()
     grafico_preco_score = preco_vs_score_view(df)
     grafico_distribuicao_das_notas = distribuicao_das_notas_view(df)
-    # grafico_evolucao_reviews_view = evolucao_reviews_view(df) Arrumar
+    grafico_evolucao_reviews = evolucao_reviews_view(df)
+    grafico_sentimento_reviews = sentimento_reviews_view(df)
+    grafico_usuarios_ativos = usuarios_mais_ativos_view(df)
     context = {
-        'grafico_preco_score': grafico_preco_score,
+        # Ordem dos gráficos
+        # 1. distribuicao_das_notas_view
+        # 2. livros_mais_avaliados_view
+        # 3. usuarios_mais_ativos_view
+        # 4. evolucao_reviews_view
+        # 5. preco_vs_score_view
+        # 6 sentimento_reviews_view
         'grafico_distribuicao_das_notas': grafico_distribuicao_das_notas,
-        # 'grafico_evolucao_reviews_view': grafico_evolucao_reviews_view,
+        #adicionar 2
+        'grafico_usuarios_ativos': grafico_usuarios_ativos,
+        'grafico_evolucao_reviews': grafico_evolucao_reviews,
+        'grafico_preco_score': grafico_preco_score,
+        'grafico_sentimento_reviews' : grafico_sentimento_reviews,
     }
     return render(request, 'dashboard.html', context)

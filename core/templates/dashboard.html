@@ -8,6 +8,18 @@
 
   <h1 style="text-align:center">Dashboard</h1>
 
-  <img src="data:image/png;base64, {{grafico_preco_score}}" alt="titulo da imagem">
+  {% comment %} # Ordem dos gráficos
+  # 1. distribuicao_das_notas_view
+  # 2. livros_mais_avaliados_view
+  # 3. usuarios_mais_ativos_view
+  # 4. evolucao_reviews_view
+  # 5. preco_vs_score_view
+  # 6 sentimento_reviews_view {% endcomment %}
   <img src="data:image/png;base64, {{grafico_distribuicao_das_notas}}" alt="titulo da imagem">
+  <img src="data:image/png;base64, {{grafico_livros_mais_avaliados_view}}" alt="titulo da imagem">
+  {% comment %} #adicionar {% endcomment %}
+  <img src="data:image/png;base64, {{grafico_usuarios_ativos}}" alt="titulo da imagem">
+  <img src="data:image/png;base64, {{grafico_evolucao_reviews}}" alt="titulo da imagem">
+  <img src="data:image/png;base64, {{grafico_preco_score}}" alt="titulo da imagem">
+  <img src="data:image/png;base64, {{grafico_sentimento_reviews}}" alt="titulo da imagem">
 {% endblock %}
