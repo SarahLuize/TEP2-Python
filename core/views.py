@@ -153,7 +153,7 @@ def distribuicao_das_notas_view(df):
 
     return grafico_distribuicao_notas
 
-def livros_mais_avaliados_view(request):
+def livros_mais_avaliados_view(df):
     top_10_livros = df['title'].value_counts().nlargest(10)
     plt.figure(figsize=(12, 8))
     top_10_livros.sort_values().plot(kind='barh', color='coral')
@@ -163,19 +163,12 @@ def livros_mais_avaliados_view(request):
     plt.tight_layout()
     grafico_top_livros = plot_to_base64(plt.gcf())
     plt.close()
-    
-    context = {
-        'grafico_top_livros': grafico_top_livros,
-        'total_avaliacoes': len(df)
-    }
-    
-    return render(request, 'core/livros_mais_avaliados_view', context)
+    return grafico_top_livros  # retorna o gráfico
 
 def usuarios_mais_ativos_view(df):
-    usuarios_mais_ativos = df['profile_name'].value_counts().dropna().nlargest(15)
-    avaliacoes = df['profile_name'].value_counts().dropna().nlargest(15)
+    usuarios_mais_ativos = df['profile_name'].replace('nan', pd.NA).dropna().value_counts().nlargest(15)
     plt.figure(figsize=(12, 6))
-    plt.barh(usuarios_mais_ativos, avaliacoes)
+    plt.barh(usuarios_mais_ativos.index, usuarios_mais_ativos.values)
     plt.title('Top 15 Usuários Mais Ativos')
     plt.xlabel('Número de Avaliações')
     plt.ylabel('Usuário')
@@ -195,18 +188,17 @@ def evolucao_reviews_view(df):
     plt.title('Evolução do Número de Avaliações por Ano')
     plt.xlabel('Ano')
     plt.ylabel('Quantidade de Avaliações')
-    
+        
     grafico_evolucao_reviews =  plot_to_base64(plt.gcf())
     plt.close()
 
     return grafico_evolucao_reviews
 
 def preco_vs_score_view(df):
-    grafico_preco_score = df[df['price'] > 0]
-    filtrar = df.sample(n=300)
+    filtrar = df[df['price'] > 0].sample(n=300)
 
     plt.figure(figsize=(12,8))
-    plt.scatter(df['price'], df['review_score'], alpha=0.3)
+    plt.scatter(filtrar['price'], filtrar['review_score'], alpha=0.3)
     plt.xlabel('Preço')
     plt.ylabel('Avaliação - Pontuação')
     plt.title('Correlação entre Preço e Nota da Avaliação')
@@ -241,21 +233,15 @@ def sentimento_reviews_view(df):
 
 def dashboard(request):
     df = get_dataframe()
-    grafico_preco_score = preco_vs_score_view(df)
     grafico_distribuicao_das_notas = distribuicao_das_notas_view(df)
-    grafico_evolucao_reviews = evolucao_reviews_view(df)
-    grafico_sentimento_reviews = sentimento_reviews_view(df)
+    grafico_livros_mais_avaliados = livros_mais_avaliados_view(df)
     grafico_usuarios_ativos = usuarios_mais_ativos_view(df)
+    grafico_evolucao_reviews = evolucao_reviews_view(df)
+    grafico_preco_score = preco_vs_score_view(df)
+    grafico_sentimento_reviews = sentimento_reviews_view(df)
     context = {
-        # Ordem dos gráficos
-        # 1. distribuicao_das_notas_view
-        # 2. livros_mais_avaliados_view
-        # 3. usuarios_mais_ativos_view
-        # 4. evolucao_reviews_view
-        # 5. preco_vs_score_view
-        # 6 sentimento_reviews_view
         'grafico_distribuicao_das_notas': grafico_distribuicao_das_notas,
-        #adicionar 2
+        'grafico_livros_mais_avaliados': grafico_livros_mais_avaliados,
         'grafico_usuarios_ativos': grafico_usuarios_ativos,
         'grafico_evolucao_reviews': grafico_evolucao_reviews,
         'grafico_preco_score': grafico_preco_score,

@@ -15,11 +15,97 @@
   # 4. evolucao_reviews_view
   # 5. preco_vs_score_view
   # 6 sentimento_reviews_view {% endcomment %}
-  <img src="data:image/png;base64, {{grafico_distribuicao_das_notas}}" alt="titulo da imagem">
-  <img src="data:image/png;base64, {{grafico_livros_mais_avaliados_view}}" alt="titulo da imagem">
-  {% comment %} #adicionar {% endcomment %}
-  <img src="data:image/png;base64, {{grafico_usuarios_ativos}}" alt="titulo da imagem">
-  <img src="data:image/png;base64, {{grafico_evolucao_reviews}}" alt="titulo da imagem">
-  <img src="data:image/png;base64, {{grafico_preco_score}}" alt="titulo da imagem">
-  <img src="data:image/png;base64, {{grafico_sentimento_reviews}}" alt="titulo da imagem">
+  <!-- <img src="data:image/png;base64, {{grafico_distribuicao_das_notas}}" alt="Distribuição das notas">
+  <img src="data:image/png;base64, {{grafico_livros_mais_avaliados}}" alt="Livros mais avaliados">
+  <img src="data:image/png;base64, {{grafico_usuarios_ativos}}" alt="Usuários mais ativos">
+  <img src="data:image/png;base64, {{grafico_evolucao_reviews}}" class="card-img-top" alt="Evolução das reviews">
+  <img src="data:image/png;base64, {{grafico_preco_score}}" class="card-img-top" alt="Preço vs Score">
+  <img src="data:image/png;base64, {{grafico_sentimento_reviews}}" class="card-img-top" alt="Sentimento reviews"> -->
+
+
+   <div class="container mt-4">
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+
+        <div class="col">
+          <div class="card">
+              <img src="data:image/png;base64, {{grafico_distribuicao_das_notas}}" class="card-img-top" alt="Distribuição das notas" />
+            <div class="card-body">
+              <h5 class="card-title">Distribuição das notas</h5>
+              <p class="card-text">Gráfico de barras vertical</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-body-secondary">Avaliações da Amazon</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+              <img src="data:image/png;base64, {{grafico_livros_mais_avaliados}}" class="card-img-top" alt="Livros mais avaliados" />
+            <div class="card-body">
+              <h5 class="card-title">Livros mais avaliados</h5>
+              <p class="card-text">Gráfico de barras horizontal</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-body-secondary">Avaliações da Amazon</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+              <img src="data:image/png;base64, {{grafico_usuarios_ativos}}" class="card-img-top" alt="Usuários mais ativos" />
+            <div class="card-body">
+              <h5 class="card-title">Usuários mais ativos</h5>
+              <p class="card-text">Gráfico de barras horizontal</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-body-secondary">Avaliações da Amazon</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+              <img src="data:image/png;base64, {{grafico_evolucao_reviews}}" class="card-img-top" alt="Evolução das reviews">
+            <div class="card-body">
+              <h5 class="card-title">Evolução das reviews</h5>
+              <p class="card-text">Gráfico de linha</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-body-secondary">Avaliações da Amazon</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+              <img src="data:image/png;base64, {{grafico_preco_score}}" class="card-img-top" alt="Preço vs Score">
+            <div class="card-body">
+              <h5 class="card-title">Preço vs Score</h5>
+              <p class="card-text">Gráfico de barras dispersão</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-body-secondary">Avaliações da Amazon</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+              <img src="data:image/png;base64, {{grafico_sentimento_reviews}}" class="card-img-top" alt="Sentimento reviews"> -->
+            <div class="card-body">
+              <h5 class="card-title">Sentimento reviews</h5>
+              <p class="card-text">Gráfico de pizza</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-body-secondary">Avaliações da Amazon</small>
+            </div>
+          </div>
+        </div>
+
+    </div>
+  </div>
+
+ 
 {% endblock %}
